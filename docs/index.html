@@ -1,52 +1,296 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta http-equiv="X-UA-Compatible" content="ie=edge" />
-<title>Markmap</title>
-<style>
-* {
-  margin: 0;
-  padding: 0;
-}
-html {
-  font-family: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
-    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-}
-#mindmap {
-  display: block;
-  width: 100vw;
-  height: 100vh;
-}
-.markmap-dark {
-  background: #27272a;
-  color: white;
-}
-</style>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markmap-toolbar@0.18.12/dist/style.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11.11.1/styles/default.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Typing & Collections 文档</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-primary: #0d1117;
+      --bg-secondary: #161b22;
+      --bg-tertiary: #1c2128;
+      --text-primary: #e6edf3;
+      --text-secondary: #8b949e;
+      --border-color: #30363d;
+      --accent-primary: #58a6ff;
+      --accent-hover: #79c0ff;
+      --card-bg: #161b22;
+      --card-hover: #1c2128;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+
+    /* Header */
+    .header {
+      background-color: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #58a6ff 0%, #7c3aed 100%);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-primary);
+    }
+
+    /* Main Layout */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 48px 64px;
+      min-height: calc(100vh - 65px);
+    }
+
+    .hero {
+      margin-bottom: 64px;
+    }
+
+    .hero h1 {
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #58a6ff 0%, #7c3aed 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 20px;
+      color: var(--text-secondary);
+      max-width: 600px;
+    }
+
+    /* Cards Grid */
+    .section-title {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      color: var(--text-primary);
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 24px;
+      transition: all 0.3s;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .card:hover {
+      background-color: var(--card-hover);
+      border-color: var(--accent-primary);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(88, 166, 255, 0.1);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .card-icon {
+      font-size: 32px;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--bg-tertiary);
+      border-radius: 8px;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .card-description {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--accent-primary);
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .card-link:hover {
+      color: var(--accent-hover);
+    }
+
+    /* Responsive */
+    @media (max-width: 968px) {
+      .container {
+        padding: 32px 24px;
+      }
+
+      .hero h1 {
+        font-size: 36px;
+      }
+
+      .hero p {
+        font-size: 16px;
+      }
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-primary);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--text-secondary);
+    }
+  </style>
 </head>
 <body>
-<svg id="mindmap"></svg>
-<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script><script src="https://cdn.jsdelivr.net/npm/markmap-view@0.18.12/dist/browser/index.js"></script><script src="https://cdn.jsdelivr.net/npm/markmap-toolbar@0.18.12/dist/index.js"></script><script>((r) => {
-          setTimeout(r);
-        })(() => {
-  const { markmap, mm } = window;
-  const toolbar = new markmap.Toolbar();
-  toolbar.attach(mm);
-  const el = toolbar.render();
-  el.setAttribute("style", "position:absolute;bottom:20px;right:20px");
-  document.body.append(el);
-})</script><script>((getMarkmap, getOptions, root2, jsonOptions) => {
-              const markmap = getMarkmap();
-              window.mm = markmap.Markmap.create(
-                "svg#mindmap",
-                (getOptions || markmap.deriveOptions)(jsonOptions),
-                root2
-              );
-              if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-                document.documentElement.classList.add("markmap-dark");
-              }
-            })(() => window.markmap,null,{"content":"Python Typing &amp; Collections Mindmaps","children":[{"content":"Live Mindmaps (GitHub Pages)","children":[{"content":"Enable GitHub Pages: Settings &#x2192; Pages &#x2192; Build and deployment &#x2192; Branch <code>main</code>, Folder <code>/docs</code> &#x2192; Save. Wait until GitHub finishes the first deploy.","children":[],"payload":{"tag":"li","lines":"6,7"}},{"content":"Live site root: <code>https://nmhjklnm.github.io/intentional-intelligence/</code>","children":[{"content":"Landing map: <code>https://nmhjklnm.github.io/intentional-intelligence/index.html</code>","children":[],"payload":{"tag":"li","lines":"8,9"}},{"content":"Collections ABC: <code>https://nmhjklnm.github.io/intentional-intelligence/collections.html</code>","children":[],"payload":{"tag":"li","lines":"9,10"}},{"content":"Design Patterns: <code>https://nmhjklnm.github.io/intentional-intelligence/design-patterns.html</code>","children":[],"payload":{"tag":"li","lines":"10,11"}},{"content":"Type System: <code>https://nmhjklnm.github.io/intentional-intelligence/type_system.html</code>","children":[],"payload":{"tag":"li","lines":"11,12"}},{"content":"Typing Guide: <code>https://nmhjklnm.github.io/intentional-intelligence/typing.html</code>","children":[],"payload":{"tag":"li","lines":"12,13"}}],"payload":{"tag":"li","lines":"7,13"}},{"content":"Optional: add static preview images or GIFs (e.g. <code>docs/collections-preview.png</code>) and reference them here once they exist.","children":[],"payload":{"tag":"li","lines":"13,15"}}],"payload":{"tag":"h2","lines":"4,5"}},{"content":"Quick Reference (Mermaid Mindmap)","children":[{"content":"<pre data-lines=\"21,41\"><code class=\"language-mermaid\">mindmap\n  root((Typing &amp; Collections))\n    Collections ABC\n      Callable\n      Iterable\n      Mapping\n    Typing Toolkit\n      TypeVar\n      Protocol\n      TypeGuard\n    Type System Notes\n      Variance\n      Narrowing\n      Exhaustiveness\n    Design Patterns\n      Protocol-based\n      Dependency Injection\n      Repository\n</code></pre>","children":[],"payload":{"tag":"pre","lines":"21,41"}}],"payload":{"tag":"h2","lines":"17,18"}},{"content":"Regenerate the Markmap Outputs","children":[{"content":"<pre data-lines=\"44,48\"><code class=\"language-bash\">npx markmap-cli /Users/yangyihe/.cursor/worktrees/____/5gRom/&lt;<span class=\"hljs-built_in\">source</span>&gt;.md \\\n  -o /Users/yangyihe/.cursor/worktrees/____/5gRom/docs/&lt;target&gt;.html\n</code></pre>","children":[],"payload":{"tag":"pre","lines":"44,48"}}],"payload":{"tag":"h2","lines":"42,43"}},{"content":"Local Preview","children":[{"content":"Open any file in <code>docs/</code> with a browser: <code>open docs/collections.html</code>","children":[],"payload":{"tag":"li","lines":"54,55"}},{"content":"Or start a simple HTTP server from the repo root: <code>python -m http.server --directory docs</code>","children":[],"payload":{"tag":"li","lines":"55,57"}}],"payload":{"tag":"h2","lines":"52,53"}},{"content":"Project Structure","children":[{"content":"<code>index.md</code>, <code>collections.md</code>, <code>typing.md</code>, <code>type_system.md</code>, <code>design-patterns.md</code>: source notes written in Markdown.","children":[],"payload":{"tag":"li","lines":"59,60"}},{"content":"<code>docs/</code>: generated Markmap HTML (<code>index.html</code> + topic pages).","children":[],"payload":{"tag":"li","lines":"60,61"}},{"content":"<code>faq.md</code>: running Q&amp;A log (kept as Markdown; no Markmap export).","children":[],"payload":{"tag":"li","lines":"61,63"}}],"payload":{"tag":"h2","lines":"57,58"}}],"payload":{"tag":"h1","lines":"0,1"}},null)</script>
+  <!-- Header -->
+  <header class="header">
+    <a href="index.html" class="logo">
+      <div class="logo-icon">🐍</div>
+      <span>Python Typing & Collections</span>
+    </a>
+    <nav class="nav-links">
+      <a href="https://github.com/nmhjklnm/intentional-intelligence" target="_blank">GitHub</a>
+      <a href="https://github.com/nmhjklnm/intentional-intelligence#readme" target="_blank">文档</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <!-- Hero Section -->
+    <div class="hero">
+      <h1>Python Typing & Collections</h1>
+      <p>深入理解 Python 类型系统与集合抽象基类，通过交互式思维导图可视化学习复杂概念。</p>
+    </div>
+
+    <!-- Mindmaps Section -->
+    <section id="mindmaps">
+      <h2 class="section-title">📚 交互式思维导图</h2>
+      <div class="cards-grid">
+        <a href="collections.html" class="card">
+          <div class="card-header">
+            <div class="card-icon">📦</div>
+            <h3 class="card-title">Collections ABC</h3>
+          </div>
+          <p class="card-description">
+            深入解析 Python 抽象基类（ABC）、容器协议（Container Protocol）以及常用集合类型的设计与实现原理。
+          </p>
+          <span class="card-link">查看思维导图 →</span>
+        </a>
+
+        <a href="typing.html" class="card">
+          <div class="card-header">
+            <div class="card-icon">🔤</div>
+            <h3 class="card-title">Typing 类型系统</h3>
+          </div>
+          <p class="card-description">
+            掌握类型注解、泛型（Generic）、协议（Protocol）、类型守卫（TypeGuard）等高级类型特性。
+          </p>
+          <span class="card-link">查看思维导图 →</span>
+        </a>
+
+        <a href="type_system.html" class="card">
+          <div class="card-header">
+            <div class="card-icon">🏗️</div>
+            <h3 class="card-title">Type System 原理</h3>
+          </div>
+          <p class="card-description">
+            理解协变逆变（Covariance/Contravariance）、类型窄化（Type Narrowing）、穷尽性检查等底层机制。
+          </p>
+          <span class="card-link">查看思维导图 →</span>
+        </a>
+
+        <a href="design-patterns.html" class="card">
+          <div class="card-header">
+            <div class="card-icon">🎨</div>
+            <h3 class="card-title">Design Patterns</h3>
+          </div>
+          <p class="card-description">
+            学习基于协议的设计模式、依赖注入（Dependency Injection）、仓储模式（Repository Pattern）等工程实践。
+          </p>
+          <span class="card-link">查看思维导图 →</span>
+        </a>
+      </div>
+    </section>
+  </div>
 </body>
 </html>
