@@ -36,5 +36,5 @@
 
 ---
 
-**在线访问**: [https://nmhjklnm.github.io/intentional-intelligence/](https://github.com/nmhjklnm/Typing_System_MindMap)
+**在线访问**: [Docs](https://github.com/nmhjklnm/Typing_System_MindMap)
 
