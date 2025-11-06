@@ -1,6 +1,7 @@
 # Python Typing & Collections Mindmaps
 
-Python typing 与 collections 学习笔记.
+- Python typing 与 collections思维导图 
+- 类型系统与设计模式思维导图.
 
 <table>
   <tr>
