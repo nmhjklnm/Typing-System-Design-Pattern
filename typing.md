@@ -447,7 +447,7 @@
 - 同上（第 3 节已详细说明）。这两个函数在 `typing` 模块中既是类型元编程工具，也是运行时辅助函数。语法：`get_origin(tp)`，`get_args(tp)`。
 - 解释: 见第 3 节。
 
-#### [ ] **get_type_hints()**
+#### [x] **get_type_hints()**
 - 获取对象的类型提示（重要的运行时函数）。语法：`get_type_hints(obj)`。但是
 为了性能和表达力，
 Pydantic 在底层做了很多黑科技：
@@ -538,7 +538,7 @@ Pydantic 在底层做了很多黑科技：
     # registry.register_protocol(str)    # ✗ TypeError
     ```
 
-#### [ ] **is_typeddict()**
+#### [x] **is_typeddict()**
 - 检查一个类型是否为 `TypedDict`（Python 3.14）。语法：`is_typeddict(tp)`。
 - 解释: 
     ```python
@@ -571,18 +571,132 @@ Pydantic 在底层做了很多黑科技：
     validate_typeddict(Config, config_data)  # ✓
     ```
 
-
-#### [ ] **clear_overloads()**
-- 清理已声明的 `overload`。语法：`clear_overloads()`。
-- 解释: 
-
-#### [ ] **@override**
+#### [x] **@override**
 - （PEP 698）用于标记覆写父类方法的装饰器，帮助类型检查。语法：`@override`。
 - 解释: 
+    ✅ @override 的价值：
+    ```python
+    class BaseRepository:
+    def save(self, data: dict) -> None:
+        raise NotImplementedError
 
-#### [ ] **@dataclass_transform**
-- （PEP 681）用于自定义装饰器的类型提示。语法：`@dataclass_transform()`。
+    class UserRepository(BaseRepository):
+        # ✅ 场景1：防止拼写错误
+        @override
+        def sava(self, data: dict) -> None:  # ❌ mypy 报错：拼写错误！
+            pass
+        
+        # ✅ 场景2：防止签名不匹配
+        @override
+        def save(self, data: str) -> None:  # ❌ mypy 报错：参数类型错了！
+            pass
+        
+        # ✅ 场景3：防止父类重构后遗漏更新
+        # 假设父类删除了 save 方法，mypy 会立即警告
+        @override
+        def save(self, data: dict) -> None:  # ❌ mypy 报错：父类已经没有这个方法了！
+            pass
+    ```
+
+
+#### [x] **clear_overloads()**
+- 清理已声明的 `overload`。语法：`clear_overloads()`。 用于测试
 - 解释: 
+7️⃣ clear_overloads() - 重载清理
+用途：清除 @overload 注册
+场景：测试、REPL
+@overload 装饰器会在内部注册函数签名
+clear_overloads() 清空这个注册表
+    ```
+    from typing import overload, clear_overloads
+
+    @overload
+    def process(x: int) -> str: ...
+
+    @overload
+    def process(x: str) -> int: ...
+
+    def process(x):
+        if isinstance(x, int):
+            return str(x)
+        return len(x)
+
+    # 清理重载定义（通常在测试中使用）
+    clear_overloads()
+    ```
+
+
+
+#### [x] **@dataclass_transform**
+- （PEP 681）用于自定义装饰器的类型提示。语法：`@dataclass_transform()`。
+- 解释: dataclass这个词从表示一个类，到现在表示一个机制。`dataclass_transform`表示 有着 dataclass 的类。会自动生成 __init__、__eq__ 等方法。
+    ```python
+    from typing import dataclass_transform
+
+    # 定义一个类似 dataclass 的装饰器
+    @dataclass_transform()
+    def my_dataclass(cls):
+        # 自动生成 __init__
+        def __init__(self, **kwargs):
+            for key, value in kwargs.items():
+                setattr(self, key, value)
+        
+        cls.__init__ = __init__
+        return cls
+
+    # 使用自定义装饰器
+    @my_dataclass
+    class Person:
+        name: str
+        age: int
+
+    # 类型检查器会理解这个类有自动生成的 __init__
+    person = Person(name="Alice", age=30)  # ✓ 类型检查通过
+    ```
+    再举一个实例，比如构造一个 dataclass但加类型验证
+    ```
+        from typing import dataclass_transform, Callable, Any
+    from functools import wraps
+
+    # 场景：创建一个支持验证的 dataclass
+    @dataclass_transform()
+    def validated_dataclass(cls):
+        """类似 dataclass，但添加类型验证"""
+        
+        # 保存原始注解
+        annotations = cls.__annotations__ if hasattr(cls, '__annotations__') else {}
+        
+        # 生成 __init__
+        def __init__(self, **kwargs):
+            for field_name, field_type in annotations.items():
+                if field_name not in kwargs:
+                    raise ValueError(f"缺少必需字段: {field_name}")
+                
+                value = kwargs[field_name]
+                # 简单的类型检查
+                if not isinstance(value, field_type):
+                    raise TypeError(
+                        f"{field_name} 应该是 {field_type}，"
+                        f"但得到了 {type(value)}"
+                    )
+                
+                setattr(self, field_name, value)
+        
+        cls.__init__ = __init__
+        return cls
+
+    @validated_dataclass
+    class Product:
+        name: str
+        price: float
+        stock: int
+
+    # 类型检查器理解 Product 的构造方式
+    product = Product(name="Laptop", price=999.99, stock=10)  # ✓
+    # product = Product(name="Laptop")  # ✗ 运行时错误：缺少字段
+    ```
+
+
 
 #### [x] **deprecated()**
 - 标记已弃用的函数或类的装饰器。语法：`deprecated("message")` 或 `@deprecated("reason")`（具体用法依 Python 版本）。

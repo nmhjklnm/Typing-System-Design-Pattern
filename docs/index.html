@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+<title>Markmap</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+}
+html {
+  font-family: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
+#mindmap {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+}
+.markmap-dark {
+  background: #27272a;
+  color: white;
+}
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markmap-toolbar@0.18.12/dist/style.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11.11.1/styles/default.min.css">
+</head>
+<body>
+<svg id="mindmap"></svg>
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script><script src="https://cdn.jsdelivr.net/npm/markmap-view@0.18.12/dist/browser/index.js"></script><script src="https://cdn.jsdelivr.net/npm/markmap-toolbar@0.18.12/dist/index.js"></script><script>((r) => {
+          setTimeout(r);
+        })(() => {
+  const { markmap, mm } = window;
+  const toolbar = new markmap.Toolbar();
+  toolbar.attach(mm);
+  const el = toolbar.render();
+  el.setAttribute("style", "position:absolute;bottom:20px;right:20px");
+  document.body.append(el);
+})</script><script>((getMarkmap, getOptions, root2, jsonOptions) => {
+              const markmap = getMarkmap();
+              window.mm = markmap.Markmap.create(
+                "svg#mindmap",
+                (getOptions || markmap.deriveOptions)(jsonOptions),
+                root2
+              );
+              if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+                document.documentElement.classList.add("markmap-dark");
+              }
+            })(() => window.markmap,null,{"content":"Python Typing &amp; Collections Mindmaps","children":[{"content":"Live Mindmaps (GitHub Pages)","children":[{"content":"Enable GitHub Pages: Settings &#x2192; Pages &#x2192; Build and deployment &#x2192; Branch <code>main</code>, Folder <code>/docs</code> &#x2192; Save. Wait until GitHub finishes the first deploy.","children":[],"payload":{"tag":"li","lines":"6,7"}},{"content":"Live site root: <code>https://nmhjklnm.github.io/intentional-intelligence/</code>","children":[{"content":"Landing map: <code>https://nmhjklnm.github.io/intentional-intelligence/index.html</code>","children":[],"payload":{"tag":"li","lines":"8,9"}},{"content":"Collections ABC: <code>https://nmhjklnm.github.io/intentional-intelligence/collections.html</code>","children":[],"payload":{"tag":"li","lines":"9,10"}},{"content":"Design Patterns: <code>https://nmhjklnm.github.io/intentional-intelligence/design-patterns.html</code>","children":[],"payload":{"tag":"li","lines":"10,11"}},{"content":"Type System: <code>https://nmhjklnm.github.io/intentional-intelligence/type_system.html</code>","children":[],"payload":{"tag":"li","lines":"11,12"}},{"content":"Typing Guide: <code>https://nmhjklnm.github.io/intentional-intelligence/typing.html</code>","children":[],"payload":{"tag":"li","lines":"12,13"}}],"payload":{"tag":"li","lines":"7,13"}},{"content":"Optional: add static preview images or GIFs (e.g. <code>docs/collections-preview.png</code>) and reference them here once they exist.","children":[],"payload":{"tag":"li","lines":"13,15"}}],"payload":{"tag":"h2","lines":"4,5"}},{"content":"Quick Reference (Mermaid Mindmap)","children":[{"content":"<pre data-lines=\"21,41\"><code class=\"language-mermaid\">mindmap\n  root((Typing &amp; Collections))\n    Collections ABC\n      Callable\n      Iterable\n      Mapping\n    Typing Toolkit\n      TypeVar\n      Protocol\n      TypeGuard\n    Type System Notes\n      Variance\n      Narrowing\n      Exhaustiveness\n    Design Patterns\n      Protocol-based\n      Dependency Injection\n      Repository\n</code></pre>","children":[],"payload":{"tag":"pre","lines":"21,41"}}],"payload":{"tag":"h2","lines":"17,18"}},{"content":"Regenerate the Markmap Outputs","children":[{"content":"<pre data-lines=\"44,48\"><code class=\"language-bash\">npx markmap-cli /Users/yangyihe/.cursor/worktrees/____/5gRom/&lt;<span class=\"hljs-built_in\">source</span>&gt;.md \\\n  -o /Users/yangyihe/.cursor/worktrees/____/5gRom/docs/&lt;target&gt;.html\n</code></pre>","children":[],"payload":{"tag":"pre","lines":"44,48"}}],"payload":{"tag":"h2","lines":"42,43"}},{"content":"Local Preview","children":[{"content":"Open any file in <code>docs/</code> with a browser: <code>open docs/collections.html</code>","children":[],"payload":{"tag":"li","lines":"54,55"}},{"content":"Or start a simple HTTP server from the repo root: <code>python -m http.server --directory docs</code>","children":[],"payload":{"tag":"li","lines":"55,57"}}],"payload":{"tag":"h2","lines":"52,53"}},{"content":"Project Structure","children":[{"content":"<code>index.md</code>, <code>collections.md</code>, <code>typing.md</code>, <code>type_system.md</code>, <code>design-patterns.md</code>: source notes written in Markdown.","children":[],"payload":{"tag":"li","lines":"59,60"}},{"content":"<code>docs/</code>: generated Markmap HTML (<code>index.html</code> + topic pages).","children":[],"payload":{"tag":"li","lines":"60,61"}},{"content":"<code>faq.md</code>: running Q&amp;A log (kept as Markdown; no Markmap export).","children":[],"payload":{"tag":"li","lines":"61,63"}}],"payload":{"tag":"h2","lines":"57,58"}}],"payload":{"tag":"h1","lines":"0,1"}},null)</script>
+</body>
+</html>

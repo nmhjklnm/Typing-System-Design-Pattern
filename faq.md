@@ -502,3 +502,15 @@ result, duration = add("req-123", 10, 20)  # 输入多了 req_id，输出变成 
 **是的，只能用于 @dataclass 装饰的类**。`field()` 本质是配置对象，存储字段元数据（默认值、是否比较等）。只有 `@dataclass` 装饰器会扫描并处理这些配置，生成 `__init__`、`__repr__` 等方法。
 **在普通类中使用**：不会报错但完全无效，`field()` 只是个普通对象不会被任何代码处理。就像给未装修的房子买家具，家具在但没法用。
 **三个系统对比**：typing 无 field（只有 Annotated 容器），dataclasses 有 field() 控制字段行为（标准库），pydantic 有 Field() 定义验证规则（第三方）。
+
+## 88. @override 不报错，是不是只是个注释？
+
+**不是注释，是类型检查器专用的指令**。`@override` 只在运行 mypy/pyright 等类型检查器时生效，Python 运行时完全忽略它。如果不运行类型检查器，就不会有任何错误。
+**三个层级对比**：注释（`# comment`）完全被忽略；类型提示（`@override`、`: int`）静态检查时有效；运行时验证（pydantic）执行时才检查。
+**触发检查**：手动运行 `mypy file.py`，或配置 IDE（Pylance/Pyright）自动检查，或在 CI/CD 中集成。`@override` 的价值是防止拼写错误、签名不匹配和父类重构后遗漏更新。
+
+## 89. README 如何渲染可点击的思维导图？
+
+GitHub README 支持 Mermaid mindmap，可在节点前显式写 `id[[标题]]` 定义节点，再用 `click id "链接" "提示"` 绑定跳转。将链接指向 `docs/*.html` 的 GitHub Pages 页面，即可在仓库首页通过该静态思维导图跳转到交互式 Markmap。
+
+
